@@ -1,15 +1,16 @@
 /**
  *  封装jsonP
  * @param {String} url 请求地址
- * @param {String} callback callback 函数名
  * @param {Function} success 成功后的回调
  */
 
 function genJsonpReq(url, success = () => {}) {
     let script = document.createElement("script")
+    // 不允许纯数字做变量名
     let callbackName = "callback" + Date.now()
     script.src = `${url}&callback=${callbackName}`
     script.type = "text/javascript"
+    // 异步加载js 加载完就执行 defer则是在html所有元素解析完成之后，DOMContentLoaded 事件触发之前完成
     script.async = true
     window[callbackName] = function(data) {
         success(data)
@@ -22,7 +23,7 @@ window.onload = function() {
     })
 }
 /**
- * 原生xhr的promise封装
+ * xhr的promise封装
  * @param {string} url 请求地址
  * @param {string} method 请求方法
  */
